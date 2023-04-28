@@ -32,9 +32,9 @@ jobs:
     # Build every microservice using Docker
     - name: Build microservices
       run: |
-        docker build -t gcr.io/${{ env.PROJECT_ID }}/microservice-1:${{ github.sha }} ./microservice-1
-        docker build -t gcr.io/${{ env.PROJECT_ID }}/microservice-2:${{ github.sha }} ./microservice-2
-        docker build -t gcr.io/${{ env.PROJECT_ID }}/microservice-3:${{ github.sha }} ./microservice-3
+        docker build -t  gcr.io/${{ env.PROJECT_ID }}/microservice-1:${{ github.sha }} ./microservice-1 -f /Devops-task/productcatalogue/Dockerfile
+        docker build -t gcr.io/${{ env.PROJECT_ID }}/microservice-2:${{ github.sha }} ./microservice-2  -f Devops-task/stockmanager/Dockerfile
+        docker build -t gcr.io/${{ env.PROJECT_ID }}/microservice-3:${{ github.sha }} ./microservice-3   -f Devops-task/shopfront/Dockerfile
 
     # Push Docker image to Google Container Registry
     - name: Push images to GCR
@@ -52,7 +52,7 @@ jobs:
         service_account_email: ${{ env.SERVICE_ACCOUNT_EMAIL }}
         export_default_credentials: true
       env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GCP_SA_KEY_PATH }}
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GKE_SA_KEY }}
       run: |
         gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} --region ${{ env.REGION }}
         helm upgrade --install microservice-1 ./microservice-1/helm-chart
