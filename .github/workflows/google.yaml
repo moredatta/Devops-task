@@ -1,0 +1,60 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  PROJECT_ID: cryptic-album-384006
+  REGION: us-central1
+  CLUSTER_NAME: cluster-1
+  SERVICE_ACCOUNT_EMAIL: my-service-account@cryptic-album-384006.iam.gserviceaccount.com
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    # Authenticate to GCP using Service Account
+    - name: Authenticate to GCP
+      uses: google-github-actions/auth@v0.5.0
+      with:
+        credentials: ${{ secrets.GCP_SA_KEY }}
+        project_id: ${{ env.PROJECT_ID }}
+        export_default_credentials: true
+
+    # Build every microservice using Docker
+    - name: Build microservices
+      run: |
+        docker build -t gcr.io/${{ env.PROJECT_ID }}/microservice-1:${{ github.sha }} ./microservice-1
+        docker build -t gcr.io/${{ env.PROJECT_ID }}/microservice-2:${{ github.sha }} ./microservice-2
+        docker build -t gcr.io/${{ env.PROJECT_ID }}/microservice-3:${{ github.sha }} ./microservice-3
+
+    # Push Docker image to Google Container Registry
+    - name: Push images to GCR
+      run: |
+        docker push gcr.io/${{ env.PROJECT_ID }}/microservice-1:${{ github.sha }}
+        docker push gcr.io/${{ env.PROJECT_ID }}/microservice-2:${{ github.sha }}
+        docker push gcr.io/${{ env.PROJECT_ID }}/microservice-3:${{ github.sha }}
+
+    # Deploy every service to Kubernetes cluster on GCP using HELM
+    - name: Deploy microservices to GKE cluster
+      uses: google-github-actions/setup-gcloud@v0.5.0
+      with:
+        version: '323.0.0'
+        project_id: ${{ env.PROJECT_ID }}
+        service_account_email: ${{ env.SERVICE_ACCOUNT_EMAIL }}
+        export_default_credentials: true
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GCP_SA_KEY_PATH }}
+      run: |
+        gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} --region ${{ env.REGION }}
+        helm upgrade --install microservice-1 ./microservice-1/helm-chart
+        helm upgrade --install microservice-2 ./microservice-2/helm-chart
+        helm upgrade --install microservice-3 ./microservice-3/helm-chart
