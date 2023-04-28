@@ -51,20 +51,20 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    # Configure Workload Identity Federation and generate an access token.
-    #- id: 'auth'
-    #  name: 'Authenticate to Google Cloud'
-    #  uses: 'google-github-actions/auth@v0'
-    #  with:
-     #   token_format: 'access_token'
-     #   workload_identity_provider: 'projects/751877015255/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-     #   service_account: 'cryptic-album-384006@appspot.gserviceaccount.com'
-
-    # Alternative option - authentication via credentials json
-    - id: 'auth'
+    #Configure Workload Identity Federation and generate an access token.
+    - id: 'auth1'
+      name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v0'
       with:
-        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+        token_format: 'access_token'
+        workload_identity_provider: 'projects/751877015255/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+        service_account: 'cryptic-album-384006@appspot.gserviceaccount.com'
+
+    # Alternative option - authentication via credentials json
+#     - id: 'auth'
+#       uses: 'google-github-actions/auth@v0'
+#       with:
+#         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
     # Build every microservice using Docker
     - name: Build microservices
