@@ -42,6 +42,16 @@ jobs:
         docker push gcr.io/${{ env.PROJECT_ID }}/microservice-1:${{ github.sha }}
         docker push gcr.io/${{ env.PROJECT_ID }}/microservice-2:${{ github.sha }}
         docker push gcr.io/${{ env.PROJECT_ID }}/microservice-3:${{ github.sha }}
+        
+    - name: Deploy microservices to GKE cluster
+      uses: google-github-actions/setup-gcloud@v0.5.0
+      with:
+        version: '323.0.0'
+        project_id: ${{ env.PROJECT_ID }}
+        service_account_email: ${{ env.SERVICE_ACCOUNT_EMAIL }}
+        export_default_credentials: true
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GKE_SA_KEY }}
 
     # Deploy every service to Kubernetes cluster on GCP using HELM
     - name: Deploy microservices to GKE cluster
@@ -53,7 +63,9 @@ jobs:
         export_default_credentials: true
       env:
         GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GKE_SA_KEY }}
-      run: |
+        
+    -  name: run services on gke
+       run: |
         gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} --region ${{ env.REGION }}
         helm upgrade --install microservice-1 ./microservice-1/helm-chart
         helm upgrade --install microservice-2 ./microservice-2/helm-chart
