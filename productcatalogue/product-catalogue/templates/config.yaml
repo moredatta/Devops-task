@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: product-catalogue-config
+ 
+data:
+  product-catalogue.yml: |
+    server:
+      port: 8020
+      ssl:
+        key-store-type: PKCS12
+        key-store: /config/keystore.p12
+        key-store-password: <your-keystore-password>
+        key-alias: <your-key-alias>
+        key-password: <your-key-password>

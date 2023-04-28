@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: shopfront
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+    - hosts:
+        - your-domain-name.com
+      secretName: tls-secret
+  rules:
+    - host: your-domain-name.com
+      http:
+        paths:
+          - path: /shopfront
+            pathType: Prefix
+            backend:
+              service:
+                name: shopfront
+                port:
+                  name: http

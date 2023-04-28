@@ -1,0 +1,5 @@
+apiVersion: v2
+name: stockmanager
+description: A Helm chart for deploying the stockmanager service
+version: 0.1.0
+

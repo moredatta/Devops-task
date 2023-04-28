@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stockmanager-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stockmanager
+  template:
+    metadata:
+      labels:
+        app: stockmanager
+    spec:
+      containers:
+        - name: stockmanager
+          image: moredatta574/stockmanager
+          ports:
+            - containerPort: 8030
+          env:
+            - name: JAVA_OPTS
+              value: "-Djava.security.egd=file:/dev/./urandom"

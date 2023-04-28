@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: product-catalogue
+ 
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    cert-manager.io/cluster-issuer: <your-cluster-issuer>
+spec:
+  tls:
+  - hosts:
+    - <your-domain-name>
+    secretName: product-catalogue-tls
+  rules:
+  - host: <your-domain-name>
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: product-catalogue
+            port:
+              name: https
