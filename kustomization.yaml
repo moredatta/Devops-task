@@ -4,3 +4,7 @@ kind: Kustomization
 resources:
   - productcatalogue/product-catalogue/templates/service.yaml
   - productcatalogue/product-catalogue/templates/deployment.yaml
+  - shopfront/shop-front/templates/deployment.yaml
+  - shopfront/shop-front/templates/service.yaml
+  - stockmanager/stockmanagerchart/templates/deployment.yaml
+  - stockmanager/stockmanagerchart/templates/service.yaml
