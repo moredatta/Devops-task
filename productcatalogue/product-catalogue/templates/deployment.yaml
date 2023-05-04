@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: product-catalogue
-        image: moredatta574/product-catalogue
+        image:  gcr.io/PROJECT_ID/IMAGE
         ports:
         - containerPort: 8020
         volumeMounts:
