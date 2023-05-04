@@ -18,6 +18,7 @@ spec:
       containers:
       - name: product-catalogue
         image:  gcr.io/PROJECT_ID/IMAGE
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8020
 #         volumeMounts:
