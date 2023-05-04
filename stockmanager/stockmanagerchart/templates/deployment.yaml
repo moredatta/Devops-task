@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: stockmanager
-          image: moredatta574/stockmanager
+          image: gcr.io/PROJECT_ID/IMAGE1
           ports:
             - containerPort: 8030
           env:
