@@ -20,10 +20,10 @@ spec:
         image:  gcr.io/PROJECT_ID/IMAGE
         ports:
         - containerPort: 8020
-        volumeMounts:
-        - name: config-volume
-          mountPath: /config
-      volumes:
-      - name: config-volume
-        configMap:
-          name: product-catalogue-config
+#         volumeMounts:
+#         - name: config-volume
+#           mountPath: /config
+#       volumes:
+#       - name: config-volume
+#         configMap:
+#           name: product-catalogue-config
