@@ -151,7 +151,7 @@ jobs:
           gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
       - name: Build Docker Image
         run: |-
-          docker build --tag "gcr.io/$PROJECT_ID/$IMAGE:$TAG" .
+          docker build -t gcr.io/$PROJECT_ID/$IMAGE:$TAG -f /home/runner/work/Devops-task/Devops-task/productcatalogue/Dockerfile /home/runner/work/Devops-task/Devops-task/productcatalogue/.
       - name: Publish Docker Image to GCR
         run: |-
           docker push "gcr.io/$PROJECT_ID/$IMAGE:$TAG"
